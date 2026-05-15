@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce API — Documentación</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a3e;
+            --bg-card: #1e1e42;
+            --bg-input: #252550;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --green: #22c55e;
+            --blue: #3b82f6;
+            --orange: #f97316;
+            --red: #ef4444;
+            --purple: #a855f7;
+            --border: #2d2d5e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        /* ==================== HEADER CUSTOM ==================== */
+        .custom-header {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+            padding: 40px 30px;
+            text-align: center;
+            border-bottom: 3px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+        .custom-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 60%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        .custom-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        .custom-header h1 span {
+            background: linear-gradient(90deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .custom-header p {
+            color: #c7d2fe;
+            font-size: 1rem;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+        .header-badges {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 16px;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+        .badge {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .badge-spring { background: rgba(34,197,94,0.2); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+        .badge-java { background: rgba(249,115,22,0.2); color: #fb923c; border: 1px solid rgba(249,115,22,0.3); }
+        .badge-h2 { background: rgba(59,130,246,0.2); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+        .badge-swagger { background: rgba(168,85,247,0.2); color: #c084fc; border: 1px solid rgba(168,85,247,0.3); }
+
+        /* ==================== SWAGGER UI DARK THEME ==================== */
+        .swagger-ui { background: var(--bg-primary) !important; }
+
+        /* Top bar */
+        .swagger-ui .topbar { display: none !important; }
+
+        /* Info section */
+        .swagger-ui .info { margin: 30px 0 !important; }
+        .swagger-ui .info .title { color: var(--text-primary) !important; font-family: 'Inter', sans-serif !important; }
+        .swagger-ui .info p, .swagger-ui .info li { color: var(--text-secondary) !important; font-family: 'Inter', sans-serif !important; }
+        .swagger-ui .info a { color: var(--accent) !important; }
+
+        /* Filter */
+        .swagger-ui .filter .operation-filter-input {
+            background: var(--bg-input) !important;
+            border: 1px solid var(--border) !important;
+            color: var(--text-primary) !important;
+            border-radius: 8px !important;
+            padding: 10px 16px !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        /* Tags / Groups */
+        .swagger-ui .opblock-tag {
+            color: var(--text-primary) !important;
+            border-bottom: 1px solid var(--border) !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+        .swagger-ui .opblock-tag:hover { background: var(--bg-secondary) !important; }
+        .swagger-ui .opblock-tag small { color: var(--text-secondary) !important; font-family: 'Inter', sans-serif !important; }
+
+        /* Operations */
+        .swagger-ui .opblock {
+            border-radius: 10px !important;
+            border: 1px solid var(--border) !important;
+            background: var(--bg-card) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2) !important;
+            margin-bottom: 12px !important;
+        }
+        .swagger-ui .opblock .opblock-summary {
+            border-bottom: 1px solid var(--border) !important;
+            padding: 10px 16px !important;
+        }
+        .swagger-ui .opblock .opblock-summary-description { color: var(--text-secondary) !important; font-family: 'Inter', sans-serif !important; }
+        .swagger-ui .opblock .opblock-summary-path { color: var(--text-primary) !important; font-family: 'Inter', sans-serif !important; }
+
+        /* GET - Blue */
+        .swagger-ui .opblock-get { background: rgba(59,130,246,0.08) !important; border-color: rgba(59,130,246,0.3) !important; }
+        .swagger-ui .opblock-get .opblock-summary-method { background: var(--blue) !important; border-radius: 6px !important; font-weight: 700 !important; }
+        .swagger-ui .opblock-get .opblock-summary { border-color: rgba(59,130,246,0.2) !important; }
+
+        /* POST - Green */
+        .swagger-ui .opblock-post { background: rgba(34,197,94,0.08) !important; border-color: rgba(34,197,94,0.3) !important; }
+        .swagger-ui .opblock-post .opblock-summary-method { background: var(--green) !important; border-radius: 6px !important; font-weight: 700 !important; }
+        .swagger-ui .opblock-post .opblock-summary { border-color: rgba(34,197,94,0.2) !important; }
+
+        /* PUT - Orange */
+        .swagger-ui .opblock-put { background: rgba(249,115,22,0.08) !important; border-color: rgba(249,115,22,0.3) !important; }
+        .swagger-ui .opblock-put .opblock-summary-method { background: var(--orange) !important; border-radius: 6px !important; font-weight: 700 !important; }
+        .swagger-ui .opblock-put .opblock-summary { border-color: rgba(249,115,22,0.2) !important; }
+
+        /* DELETE - Red */
+        .swagger-ui .opblock-delete { background: rgba(239,68,68,0.08) !important; border-color: rgba(239,68,68,0.3) !important; }
+        .swagger-ui .opblock-delete .opblock-summary-method { background: var(--red) !important; border-radius: 6px !important; font-weight: 700 !important; }
+        .swagger-ui .opblock-delete .opblock-summary { border-color: rgba(239,68,68,0.2) !important; }
+
+        /* Operation body */
+        .swagger-ui .opblock-body { background: var(--bg-card) !important; }
+        .swagger-ui .opblock-description-wrapper p { color: var(--text-secondary) !important; font-family: 'Inter', sans-serif !important; }
+
+        /* Parameters */
+        .swagger-ui .parameters-col_description p { color: var(--text-secondary) !important; }
+        .swagger-ui .parameter__name { color: var(--text-primary) !important; font-family: 'Inter', sans-serif !important; }
+        .swagger-ui .parameter__type { color: var(--accent) !important; }
+        .swagger-ui .parameter__in { color: var(--text-secondary) !important; }
+
+        /* Tables */
+        .swagger-ui table thead tr th { color: var(--text-secondary) !important; border-bottom: 1px solid var(--border) !important; }
+        .swagger-ui table tbody tr td { color: var(--text-primary) !important; border-bottom: 1px solid var(--border) !important; }
+
+        /* Inputs */
+        .swagger-ui input[type=text], .swagger-ui textarea, .swagger-ui select {
+            background: var(--bg-input) !important;
+            border: 1px solid var(--border) !important;
+            color: var(--text-primary) !important;
+            border-radius: 6px !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+        .swagger-ui textarea { min-height: 120px !important; }
+
+        /* Buttons */
+        .swagger-ui .btn {
+            border-radius: 6px !important;
+            font-family: 'Inter', sans-serif !important;
+            font-weight: 600 !important;
+            transition: all 0.2s ease !important;
+        }
+        .swagger-ui .btn.execute {
+            background: var(--accent) !important;
+            border-color: var(--accent) !important;
+            color: #fff !important;
+        }
+        .swagger-ui .btn.execute:hover {
+            background: var(--accent-hover) !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 12px rgba(99,102,241,0.4) !important;
+        }
+        .swagger-ui .btn.cancel { background: var(--bg-input) !important; color: var(--text-primary) !important; border-color: var(--border) !important; }
+
+        /* Response section */
+        .swagger-ui .responses-wrapper { background: var(--bg-card) !important; }
+        .swagger-ui .response-col_status { color: var(--text-primary) !important; font-family: 'Inter', sans-serif !important; }
+        .swagger-ui .response-col_description p { color: var(--text-secondary) !important; }
+        .swagger-ui .responses-inner { background: var(--bg-card) !important; }
+        .swagger-ui .response-col_links { color: var(--text-secondary) !important; }
+
+        /* Code / JSON */
+        .swagger-ui .highlight-code {
+            background: var(--bg-primary) !important;
+            border-radius: 8px !important;
+            border: 1px solid var(--border) !important;
+        }
+        .swagger-ui .highlight-code pre { color: #e2e8f0 !important; }
+        .swagger-ui pre.microlight {
+            background: var(--bg-primary) !important;
+            color: #e2e8f0 !important;
+            border-radius: 8px !important;
+            border: 1px solid var(--border) !important;
+            font-size: 13px !important;
+        }
+
+        /* Models / Schemas */
+        .swagger-ui section.models {
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 10px !important;
+        }
+        .swagger-ui section.models h4 { color: var(--text-primary) !important; border-bottom: 1px solid var(--border) !important; }
+        .swagger-ui .model-box { background: var(--bg-secondary) !important; }
+        .swagger-ui .model { color: var(--text-primary) !important; font-family: 'Inter', sans-serif !important; }
+        .swagger-ui .model-title { color: var(--text-primary) !important; font-family: 'Inter', sans-serif !important; }
+        .swagger-ui .model .property { color: var(--text-secondary) !important; }
+        .swagger-ui .model .property.primitive { color: var(--accent) !important; }
+        .swagger-ui span.model-toggle::after { filter: invert(1) !important; }
+
+        /* Tab headers */
+        .swagger-ui .tab li { color: var(--text-secondary) !important; }
+        .swagger-ui .tab li.active { color: var(--text-primary) !important; }
+        .swagger-ui .opblock-section-header { background: var(--bg-secondary) !important; border-bottom: 1px solid var(--border) !important; }
+        .swagger-ui .opblock-section-header h4 { color: var(--text-primary) !important; font-family: 'Inter', sans-serif !important; }
+        .swagger-ui .opblock-section-header label { color: var(--text-secondary) !important; }
+
+        /* Response wrapper / Live response */
+        .swagger-ui .live-responses-table .response-col_status { color: var(--text-primary) !important; }
+        .swagger-ui .responses-header td { color: var(--text-primary) !important; }
+
+        /* Markdown descriptions */
+        .swagger-ui .markdown p, .swagger-ui .markdown li { color: var(--text-secondary) !important; }
+        .swagger-ui .markdown code {
+            background: var(--bg-input) !important;
+            color: var(--accent) !important;
+            padding: 2px 6px !important;
+            border-radius: 4px !important;
+        }
+
+        /* Loading */
+        .swagger-ui .loading-container { padding: 40px; }
+        .swagger-ui .loading-container .loading::after { color: var(--text-secondary) !important; }
+
+        /* Authorization */
+        .swagger-ui .auth-wrapper { background: var(--bg-card) !important; }
+        .swagger-ui .dialog-ux .modal-ux { background: var(--bg-card) !important; border: 1px solid var(--border) !important; }
+        .swagger-ui .dialog-ux .modal-ux-header h3 { color: var(--text-primary) !important; }
+
+        /* Arrow icons */
+        .swagger-ui svg.arrow { fill: var(--text-secondary) !important; }
+
+        /* Copy button */
+        .swagger-ui .copy-to-clipboard { filter: invert(0.8) !important; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+        /* Footer */
+        .custom-footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-header">
+        <h1>🛒 E-Commerce <span>Product API</span></h1>
+        <p>API RESTful para la gestión del catálogo de productos — Taller Spring Boot</p>
+        <div class="header-badges">
+            <span class="badge badge-spring">Spring Boot 3.2</span>
+            <span class="badge badge-java">Java 17</span>
+            <span class="badge badge-h2">H2 Database</span>
+            <span class="badge badge-swagger">OpenAPI 3.0</span>
+        </div>
+    </div>
+
+    <div id="swagger-ui"></div>
+
+    <div class="custom-footer">
+        E-Commerce API v1.0.0 — Desarrollado con Spring Boot
+    </div>
+
+    <script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js"></script>
+    <script>
+        SwaggerUIBundle({
+            url: "/api-docs",
+            dom_id: '#swagger-ui',
+            presets: [SwaggerUIBundle.presets.apis, SwaggerUIBundle.SwaggerUIStandalonePreset],
+            layout: "BaseLayout",
+            deepLinking: true,
+            tryItOutEnabled: true,
+            filter: true,
+            displayRequestDuration: true,
+            defaultModelsExpandDepth: 2,
+            operationsSorter: "method"
+        });
+    </script>
+</body>
+</html>
